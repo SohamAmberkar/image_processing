@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Processed Image</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #444;
+      }
+
+      .processed-image {
+        display: inline-block;
+        margin: 10px;
+        text-align: center;
+        background-color: #fff;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 250px;
+      }
+
+      .processed-image h2 {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #555;
+      }
+
+      .processed-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+
+      a {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+
+      a:hover {
+        background-color: #0056b3;
+      }
+
+      @media (max-width: 768px) {
+        .processed-image {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Processed Image: {{ filename }}</h1>
+      {% for name, url in processed_images.items() %}
+      <div class="processed-image">
+        <h2>{{ name }}</h2>
+        <img src="{{ url }}" alt="{{ name }}" />
+      </div>
+      {% endfor %}
+
+      <!-- Button to trigger cleanup and go back -->
+      <a href="#" class="button" onclick="cleanupAndRedirect()">Go Back</a>
+    </div>
+
+    <script>
+      function cleanupAndRedirect() {
+        // Perform cleanup using AJAX POST request
+        fetch("/cleanup", {
+          method: "POST",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Cleanup successful");
+            // Redirect to home page after cleanup
+            window.location.href = "{{ url_for('home') }}";
+          })
+          .catch((error) => {
+            console.error("Error during cleanup:", error);
+            // Redirect to home page even on error
+            window.location.href = "{{ url_for('home') }}";
+          });
+      }
+    </script>
+  </body>
+</html>
